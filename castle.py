@@ -32,7 +32,7 @@ e=pygame.image.load("player6.png")
 f=pygame.image.load("player7.png")
 g=pygame.image.load("player8.gif")
 player=[a,b,c,d,e,f,g]
-arrow=pygame.image.load("arrow.png")
+
 
 while True:
 	screen.fill(black)
@@ -51,6 +51,7 @@ while True:
 		if event.type == pygame.KEYDOWN:
            		if event.key==K_DOWN:
                 		keys[0]=True
+				i=6
             		elif event.key==K_UP:
                			keys[1]=True
 				i=4
@@ -69,7 +70,8 @@ while True:
             		elif event.key==pygame.K_RIGHT:
                 		keys[3]=False
 		if keys[0]:
-        		pos_y+=15
+        		pos_y+=30
+			screen.blit(player[i],[pos_x,pos_y])
     		elif keys[1]:
 			pos_x+=45
 			pos_y-=30					
