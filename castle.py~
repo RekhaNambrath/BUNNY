@@ -44,7 +44,7 @@ e=pygame.image.load("player6.png")
 f=pygame.image.load("player7.png")
 g=pygame.image.load("player8.gif")
 player=[a,b,c,d,e,f,g]
-carrot=Carrot
+carrot=Carrot()
 def random_carrot():
 	cpos_x=random.randint(200,750)
 	cpos_y=random.randint(200,550)
