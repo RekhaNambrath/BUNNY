@@ -1,12 +1,78 @@
 import sys,random,pygame,math
 from pygame.locals import *
 class Carrot(pygame.sprite.Sprite):
-	def _init_(self):
-		pygame.sprite.Sprite._init_(self)
-		#self.image=pygame.Surface([25,25])	
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)	
 		self.image=pygame.image.load("carrot.png")
-		self.image.set_colorkey(white)
 		self.rect=self.image.get_rect()
+class Player(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)	
+		self.image=pygame.image.load("player.png")
+		self.rect=self.image.get_rect()
+	def render_image(self,var,x,y):
+		if var==0:
+			self.image=pygame.image.load("player.png")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==1:
+			self.image=pygame.image.load("player2.png")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))		
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==2:
+			self.image=pygame.image.load("player4.gif")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==3:
+			self.image=pygame.image.load("player1.gif")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==4:
+			self.image=pygame.image.load("player6.png")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==5:
+			self.image=pygame.image.load("player7.png")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==6:
+			self.image=pygame.image.load("player8.gif")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
+			#screen.fill(Color("black"),player.rect)
+			#print player.rect.x,player.rect.y
+		if var==7:
+			self.image=pygame.image.load("player9.gif")
+			self.rect=self.image.get_rect()
+			self.rect.x=x
+			self.rect.y=y
+			screen.blit(self.image,(x,y))
 
 pygame.init()
 fps=30
@@ -21,7 +87,7 @@ screen=pygame.display.set_mode(size)
 pygame.display.set_caption("Game")
 s = pygame.display.get_surface()
 screen.fill(black)
-keys=[False,False,False,False]
+keys=[False,False,False,False,False]
 grass=pygame.image.load("grass2.jpg")
 castle=pygame.image.load("castle1.jpg")
 pos_x=100
@@ -30,27 +96,21 @@ player_pos=[pos_x,pos_y]
 cpos_x=0
 cpos_y=0
 status=False
+flag=0
 carrot_pos=[cpos_x,cpos_y,status]
 x=castle.get_height()
 carrots=0
 i=0
 y=0
 x=0
-a=pygame.image.load("player.png")
-b=pygame.image.load("player2.png")
-c=pygame.image.load("player4.gif")
-d=pygame.image.load("player5.png")
-e=pygame.image.load("player6.png")
-f=pygame.image.load("player7.png")
-g=pygame.image.load("player8.gif")
-player=[a,b,c,d,e,f,g]
-carrot=Carrot
+player=Player()
+carrot=Carrot()
 def random_carrot():
 	cpos_x=random.randint(200,750)
 	cpos_y=random.randint(200,550)
 	status=True
-	#carrot.rect.x=cpos_x
-	#carrot.rect.y=cpos_y
+	carrot.rect.x=cpos_x
+	carrot.rect.y=cpos_y
 	carrot_pos=[cpos_x,cpos_y,status]	
 	return carrot_pos
 
@@ -63,15 +123,16 @@ while True:
     			screen.blit(castle,(0,x+150))
     			screen.blit(castle,(0,x+300))
     			screen.blit(castle,(0,x+450))	
-	screen.blit(player[i],[pos_x,pos_y])
+	screen.blit(player.image,[pos_x,pos_y])
 	if(carrot_pos[2]):
-		
-		if pos_x==cpos_x or pos_y==cpos_y:
-			screen.blit(player[0],[pos_x,pos_y])
-			status=False
+		if pygame.sprite.collide_rect(carrot,player):
+			player.render_image(7,pos_x,pos_y)			
+			carrot_pos[2]=False
+			flag=1
 			carrots+=1
 		else:
-			screen.blit(carrot.image,[carrot_pos[0],carrot_pos[1]])	
+			screen.blit(carrot.image,[carrot_pos[0],carrot_pos[1]])
+			#screen.fill(Color("black"),carrot.rect)
 	else:		
 		carrot_pos=random_carrot()
 	for event in pygame.event.get():
@@ -81,39 +142,49 @@ while True:
            		if event.key==K_DOWN:
                 		keys[0]=True
 				i=6
-            		elif event.key==K_UP:
+            		elif event.key==K_SPACE:
                			keys[1]=True
 				i=4
             		elif event.key==K_LEFT:
                			 keys[2]=True
+				 i=3
             		elif event.key==K_RIGHT:
                 		keys[3]=True
 				i=2
+			elif event.key==K_UP:
+				keys[4]=True
+				i=1
        		if event.type == pygame.KEYUP:
             		if event.key==pygame.K_DOWN:
                 		keys[0]=False
-            		elif event.key==pygame.K_UP:
+            		elif event.key==pygame.K_SPACE:
                 		keys[1]=False
             		elif event.key==pygame.K_LEFT:
                 		keys[2]=False
             		elif event.key==pygame.K_RIGHT:
                 		keys[3]=False
+			elif event.key==pygame.K_UP:
+				keys[4]=False
 		if keys[0]:
         		pos_y+=30
-			screen.blit(player[i],[pos_x,pos_y])
+			player.render_image(i,pos_x,pos_y)
     		elif keys[1]:
 			pos_x+=45
-			pos_y-=30					
-			screen.blit(player[i],[pos_x,pos_y])
+			pos_y-=30				
+			player.render_image(i,pos_x,pos_y)	
 			pos_x+=100
 			pos_y+=30
-			screen.blit(player[i+1],[pos_x,pos_y])
+			player.render_image(i+1,pos_x,pos_y)		
 			i=0				
     		elif keys[2]:
         		pos_x-=15
+			player.render_image(i,pos_x,pos_y)
     		elif keys[3]:			
-			screen.blit(player[i],[pos_x,pos_y])
-			pos_x+=25
-			pygame.display.flip()		
+			pos_x+=25						
+			player.render_image(i,pos_x,pos_y)
+		elif keys[4]:
+			pos_y-=10
+			player.render_image(i,pos_x,pos_y)
+		pygame.display.flip()		
 	pygame.display.update()
 	clock.tick(50)	
